@@ -1,0 +1,10 @@
+{
+  "name": "purescript-atom-api",
+  "private": true,
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp":            "^3.8.1",
+    "gulp-purescript": "^0.0.8"
+  }
+}
