@@ -1,0 +1,7 @@
+.psci_modules/
+bower_components/
+node_modules/
+output/
+tmp/
+.psci
+npm-debug.log
