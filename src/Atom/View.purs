@@ -1,0 +1,1 @@
+module Atom.View where

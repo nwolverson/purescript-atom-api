@@ -1,0 +1,1 @@
+module Atom.Git where
