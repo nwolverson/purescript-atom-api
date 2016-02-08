@@ -1,10 +1,10 @@
 {
   "name": "purescript-atom-api",
   "private": true,
-  "ignore": [
-  ],
+  "ignore": [],
   "dependencies": {
+    "purescript-prelude": "~0.1.4",
+    "purescript-eff": "~0.1.2"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

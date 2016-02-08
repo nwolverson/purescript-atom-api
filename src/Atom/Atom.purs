@@ -1,7 +1,7 @@
 module Atom.Atom where
 
-import Atom.Clipboard
-import Control.Monad.Eff
+import Atom.Clipboard (Clipboard)
+import Control.Monad.Eff (Eff)
 
 data Mode
   = Editor
@@ -9,7 +9,4 @@ data Mode
 
 type Atom = forall r. { clipboard :: Clipboard | r }
 
-foreign import getAtom
-  "function getAtom() {\
-  \  return atom;\
-  \}" :: forall e. Eff e Atom
+foreign import getAtom :: forall e. Eff e Atom
