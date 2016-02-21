@@ -8,6 +8,8 @@ exports.getText = function (e) { return function () { return e.getText(); }; };
 exports.getTextInRangeImpl = function(e) {
   return e.getTextInBufferRange.bind(e);
 };
+
+exports.setTextInBufferRangeImpl = function(e) { return e.setTextInBufferRange.bind(e); }
 exports.onDidSaveImpl = function(e) { return e.onDidSave.bind(e); };
 
 exports.isTextEditor = function (item) {

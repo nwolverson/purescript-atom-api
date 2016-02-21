@@ -1,6 +1,5 @@
 module Atom.Project where
 
-import Prelude
 import Control.Monad.Eff (Eff)
 
 foreign import data Project :: *

@@ -1,10 +1,10 @@
 module Atom.Workspace (Workspace, WORKSPACE, observeTextEditors, onDidChangeActivePaneItem, getActiveTextEditor) where
 
-import Prelude
-import Control.Monad.Eff
-import Atom.Editor
+import Prelude (Unit, (<$>))
+import Control.Monad.Eff (Eff)
+import Atom.Editor (TextEditor, toEditor)
 import Data.Foreign (Foreign)
-import Data.Function.Eff
+import Data.Function.Eff (EffFn1, mkEffFn1, runEffFn1)
 import Data.Maybe(Maybe)
 
 foreign import data Workspace :: *

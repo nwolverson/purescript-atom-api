@@ -1,12 +1,12 @@
-module Atom.Editor (TextEditor, EDITOR, getTitle, getLongTitle, getPath, getText, getTextInRange, toEditor, onDidSave) where
+module Atom.Editor (TextEditor, EDITOR, getTitle, getLongTitle, getPath, getText, getTextInRange, setTextInBufferRange, toEditor, onDidSave) where
 
 import Prelude((<<<),Unit)
 import Control.Monad.Eff(Eff)
 import Data.Maybe (Maybe(..))
 import Data.Foreign (Foreign)
 import Unsafe.Coerce(unsafeCoerce)
-import Atom.Range
-import Data.Function.Eff
+import Atom.Range (Range)
+import Data.Function.Eff (EffFn1, EffFn2, mkEffFn1, runEffFn1, runEffFn2)
 
 foreign import data TextEditor :: *
 foreign import data EDITOR :: !
@@ -25,6 +25,10 @@ foreign import getTextInRangeImpl :: forall eff. TextEditor -> EffFn1 (editor ::
 getTextInRange :: forall eff. TextEditor -> Range -> Eff (editor :: EDITOR | eff) String
 getTextInRange = runEffFn1 <<< getTextInRangeImpl
 
+foreign import setTextInBufferRangeImpl :: forall eff. TextEditor -> EffFn2 (editor :: EDITOR | eff) Range String Range
+
+setTextInBufferRange :: forall eff. TextEditor -> Range -> String -> Eff (editor :: EDITOR | eff) Range
+setTextInBufferRange = runEffFn2 <<< setTextInBufferRangeImpl
 
 foreign import onDidSaveImpl :: forall eff. TextEditor
   -> EffFn1 (editor :: EDITOR | eff) (EffFn1 (editor ::EDITOR | eff) { path :: String} Unit) Unit

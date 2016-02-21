@@ -1,9 +1,9 @@
 module Atom.Config (getConfig, setConfig, Config, CONFIG) where
 
-import Prelude
-import Control.Monad.Eff
-import Data.Function.Eff
-import Data.Foreign
+import Prelude (Unit, (<<<))
+import Control.Monad.Eff (Eff)
+import Data.Function.Eff (EffFn2, EffFn1, runEffFn2, runEffFn1)
+import Data.Foreign (Foreign)
 
 foreign import data Config :: *
 foreign import data CONFIG :: !
