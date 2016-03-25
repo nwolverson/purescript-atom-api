@@ -17,3 +17,13 @@ exports.getActiveTextEditorImpl = function (w) {
     return w.getActiveTextEditor();
   };
 };
+
+exports.addModalPanelImpl = function (w) {
+  return w.addModalPanel.bind(w);
+};
+
+exports.destroyPanel = function (p) {
+  return function() {
+    p.destroy();
+  };
+};
