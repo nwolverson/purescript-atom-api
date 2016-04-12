@@ -1,4 +1,4 @@
-module Atom.Editor (TextEditor, getTitle, getLongTitle, getPath, getText, getTextInRange, setTextInBufferRange, setText, getBuffer, toEditor, onDidSave, getCursorBufferPosition, module Atom.Types) where
+module Atom.Editor (TextEditor, getTitle, getLongTitle, getPath, getText, getTextInRange, setTextInBufferRange, setTextInBufferRange', SetTextOptions, setText, getBuffer, toEditor, onDidSave, getCursorBufferPosition, module Atom.Types) where
 
 import Prelude((<<<),Unit)
 import Control.Monad.Eff(Eff)
@@ -6,7 +6,7 @@ import Data.Maybe (Maybe(..))
 import Data.Foreign (Foreign)
 import Unsafe.Coerce(unsafeCoerce)
 import Atom.Range (Range)
-import Data.Function.Eff (EffFn1, EffFn2, mkEffFn1, runEffFn1, runEffFn2)
+import Data.Function.Eff (EffFn1, EffFn3, mkEffFn1, runEffFn1, runEffFn3)
 import Atom.Point (Point)
 import Atom.TextBuffer (TextBuffer)
 import Atom.Types (EDITOR)
@@ -27,10 +27,19 @@ foreign import getTextInRangeImpl :: forall eff. TextEditor -> EffFn1 (editor ::
 getTextInRange :: forall eff. TextEditor -> Range -> Eff (editor :: EDITOR | eff) String
 getTextInRange = runEffFn1 <<< getTextInRangeImpl
 
-foreign import setTextInBufferRangeImpl :: forall eff. TextEditor -> EffFn2 (editor :: EDITOR | eff) Range String Range
+type SetTextOptions = { normalizeLineEndings :: Boolean, skipUndo :: Boolean }
+
+foreign import setTextInBufferRangeImpl :: forall eff. TextEditor
+  -> EffFn3 (editor :: EDITOR | eff) Range String { normalizeLineEndings :: Boolean, undo :: String } Range
 
 setTextInBufferRange :: forall eff. TextEditor -> Range -> String -> Eff (editor :: EDITOR | eff) Range
-setTextInBufferRange = runEffFn2 <<< setTextInBufferRangeImpl
+setTextInBufferRange editor range text = setTextInBufferRange' editor range text
+  { normalizeLineEndings: true, skipUndo: false} -- atom defaults
+
+setTextInBufferRange' :: forall eff. TextEditor -> Range -> String -> SetTextOptions -> Eff (editor :: EDITOR | eff) Range
+setTextInBufferRange' editor range text {normalizeLineEndings, skipUndo} =
+  let undo = if skipUndo then "skip" else ""
+  in runEffFn3 (setTextInBufferRangeImpl editor) range text { normalizeLineEndings, undo }
 
 foreign import setTextImpl :: forall eff. TextEditor -> EffFn1 (editor :: EDITOR | eff) String Range
 
