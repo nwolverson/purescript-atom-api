@@ -2,7 +2,7 @@
 
 exports.getTitle = function (e) { return function () { return e.getTitle(); }; };
 exports.getLongTitle = function (e) { return function () { return e.getLongTitle(); }; };
-exports.getPath = function (e) { return function () { return e.getPath(); }; };
+exports.getPathImpl = function (e) { return function () { return e.getPath(); }; };
 
 exports.getText = function (e) { return function () { return e.getText(); }; };
 exports.getTextInRangeImpl = function(e) {

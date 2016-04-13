@@ -1,15 +1,16 @@
 module Atom.Editor (TextEditor, getTitle, getLongTitle, getPath, getText, getTextInRange, setTextInBufferRange, setTextInBufferRange', SetTextOptions, setText, getBuffer, toEditor, onDidSave, getCursorBufferPosition, module Atom.Types) where
 
-import Prelude((<<<),Unit)
-import Control.Monad.Eff(Eff)
-import Data.Maybe (Maybe(..))
-import Data.Foreign (Foreign)
-import Unsafe.Coerce(unsafeCoerce)
-import Atom.Range (Range)
-import Data.Function.Eff (EffFn1, EffFn3, mkEffFn1, runEffFn1, runEffFn3)
+import Prelude
 import Atom.Point (Point)
+import Atom.Range (Range)
 import Atom.TextBuffer (TextBuffer)
 import Atom.Types (EDITOR)
+import Control.Monad.Eff (Eff)
+import Data.Either (either)
+import Data.Foreign (readString, Foreign)
+import Data.Function.Eff (EffFn1, EffFn3, mkEffFn1, runEffFn1, runEffFn3)
+import Data.Maybe (Maybe(..))
+import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data TextEditor :: *
 
@@ -17,7 +18,12 @@ foreign import getTitle :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff
 
 foreign import getLongTitle :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
 
-foreign import getPath :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
+foreign import getPathImpl :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) Foreign
+
+getPath :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) (Maybe String)
+getPath editor = do
+  res <- readString <$> getPathImpl editor
+  pure $ either (const Nothing) Just res
 
 foreign import getText :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
 
