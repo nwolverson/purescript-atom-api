@@ -10,3 +10,8 @@ exports.mkRangeImpl = function(p1, p2) {
   var Range = require('atom').Range;
   return new Range(p1,p2);
 };
+exports.containsPoint = function (r) {
+  return function(p) {
+    return r.containsPoint(p);
+  };
+};
