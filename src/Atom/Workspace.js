@@ -27,3 +27,9 @@ exports.destroyPanel = function (p) {
     p.destroy();
   };
 };
+
+exports.openImpl = function (w) {
+  return function (name, opt, cb, err) {
+    return w.open(name,opt).then(cb, err);
+  };
+};

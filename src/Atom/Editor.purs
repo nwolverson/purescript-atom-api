@@ -1,6 +1,11 @@
-module Atom.Editor (TextEditor, getTitle, getLongTitle, getPath, getText, getTextInRange, setTextInBufferRange, setTextInBufferRange', SetTextOptions, setText, getBuffer, toEditor, onDidSave, getCursorBufferPosition, module Atom.Types) where
+module Atom.Editor (TextEditor, getTitle, getLongTitle, getPath, getText, getTextInRange, getSelectedText,
+  setTextInBufferRange, setTextInBufferRange', SetTextOptions, setText, insertText,
+  getBuffer, toEditor, onDidSave,
+  getCursorBufferPosition, moveToTop, moveToBottom, moveUp, moveDown, moveToBeginningOfLine,
+  module Atom.Types, setGrammar) where
 
 import Prelude
+import Atom.Grammar (Grammar)
 import Atom.Point (Point)
 import Atom.Range (Range)
 import Atom.TextBuffer (TextBuffer)
@@ -27,6 +32,7 @@ getPath editor = do
 
 foreign import getText :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
 
+foreign import getSelectedText :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
 
 foreign import getTextInRangeImpl :: forall eff. TextEditor -> EffFn1 (editor :: EDITOR | eff) Range String
 
@@ -52,6 +58,14 @@ foreign import setTextImpl :: forall eff. TextEditor -> EffFn1 (editor :: EDITOR
 setText :: forall eff. TextEditor -> String -> Eff (editor :: EDITOR | eff) Range
 setText = runEffFn1 <<< setTextImpl
 
+-- really returns Boolean|Range...
+foreign import insertTextImpl :: forall eff. TextEditor -> EffFn1 (editor :: EDITOR | eff) String Unit
+
+insertText :: forall eff. TextEditor -> String -> Eff (editor :: EDITOR | eff) Unit
+insertText = runEffFn1 <<< insertTextImpl
+
+
+
 foreign import onDidSaveImpl :: forall eff. TextEditor
   -> EffFn1 (editor :: EDITOR | eff) (EffFn1 (editor ::EDITOR | eff) { path :: String} Unit) Unit
 
@@ -61,6 +75,22 @@ onDidSave e f = runEffFn1 (onDidSaveImpl e) (mkEffFn1 f)
 
 
 foreign import getCursorBufferPosition :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) Point
+
+foreign import moveToTop :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) Unit
+
+foreign import moveToBottom :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) Unit
+
+
+foreign import moveUpImpl :: forall eff. TextEditor -> EffFn1 (editor :: EDITOR | eff) Int Unit
+
+moveUp :: forall eff. TextEditor -> Int -> Eff (editor :: EDITOR | eff) Unit
+moveUp = runEffFn1 <<< moveUpImpl
+
+foreign import moveDownImpl :: forall eff. TextEditor ->  EffFn1 (editor :: EDITOR | eff) Int Unit
+moveDown :: forall eff. TextEditor -> Int -> Eff (editor :: EDITOR | eff) Unit
+moveDown = runEffFn1 <<< moveDownImpl
+
+foreign import moveToBeginningOfLine :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) Unit
 
 
 toEditor :: Foreign -> Maybe TextEditor
@@ -73,3 +103,5 @@ toEditor item =
 foreign import isTextEditor :: Foreign -> Boolean
 
 foreign import getBuffer :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) TextBuffer
+
+foreign import setGrammar :: forall eff. TextEditor -> Grammar -> Eff (editor :: EDITOR | eff) Unit

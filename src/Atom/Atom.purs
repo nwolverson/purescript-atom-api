@@ -8,6 +8,7 @@ import Atom.Config (Config)
 import Atom.NotificationManager (NotificationManager)
 import Atom.Project (Project)
 import Atom.Workspace (Workspace)
+import Atom.GrammarRegistry (GrammarRegistry)
 
 data Mode
   = Editor
@@ -20,6 +21,7 @@ type Atom =
   , config :: Config
   , project :: Project
   , workspace :: Workspace
+  , grammars :: GrammarRegistry
   }
 
 foreign import getAtom :: forall e. Eff e Atom

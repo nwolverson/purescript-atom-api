@@ -1,12 +1,12 @@
-module Atom.Workspace (Workspace, WORKSPACE, observeTextEditors, onDidChangeActivePaneItem, getActiveTextEditor, addModalPanel, Panel, destroyPanel) where
+module Atom.Workspace (Workspace, WORKSPACE, observeTextEditors, onDidChangeActivePaneItem, getActiveTextEditor, addModalPanel, Panel, destroyPanel, open, OpenOptions, defaultOpenOptions) where
 
-import Prelude (Unit, (<$>))
-import Control.Monad.Eff (Eff)
-import Atom.Editor (TextEditor, toEditor)
-import Data.Foreign (Foreign)
-import Data.Function.Eff (EffFn1, mkEffFn1, runEffFn1)
-import Data.Maybe(Maybe)
+import Prelude
 import DOM.Node.Types
+import Atom.Editor (TextEditor, toEditor)
+import Control.Monad.Eff (Eff)
+import Data.Foreign (Foreign)
+import Data.Function.Eff (runEffFn4, EffFn4, EffFn1, runEffFn2, EffFn2, mkEffFn1, runEffFn1)
+import Data.Maybe (Maybe)
 
 foreign import data Workspace :: *
 foreign import data WORKSPACE :: !
@@ -46,5 +46,36 @@ foreign import data Panel :: *
 
 foreign import destroyPanel :: forall eff. Panel -> Eff (workspace::WORKSPACE | eff) Unit
 
--- TODO TODO TODO
--- foreign import getModel
+defaultOpenOptions :: OpenOptions
+defaultOpenOptions =
+  { initialLine: 0
+  , initialColumn: 0
+  , split: "left"
+  , activatePane: true
+  , activateItem: true
+  , pending: false
+  , searchAllPanes: false
+  }
+type OpenOptions =
+  { initialLine :: Int
+  , initialColumn :: Int
+  , split :: String
+  , activatePane :: Boolean
+  , activateItem :: Boolean
+  , pending :: Boolean
+  , searchAllPanes :: Boolean
+  }
+
+foreign import openImpl :: forall eff. Workspace
+  -> EffFn4 (workspace :: WORKSPACE | eff)
+      String
+      OpenOptions
+      (EffFn1 (workspace :: WORKSPACE | eff) TextEditor Unit)
+      (Eff (workspace :: WORKSPACE | eff) Unit)
+      Unit
+
+open :: forall eff. Workspace -> String -> OpenOptions ->
+  (TextEditor -> Eff (workspace :: WORKSPACE | eff) Unit) ->
+  (Eff (workspace :: WORKSPACE | eff) Unit) ->
+  Eff (workspace :: WORKSPACE | eff) Unit
+open w s o cb err = runEffFn4 (openImpl w) s o (mkEffFn1 cb) err
