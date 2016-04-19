@@ -43,3 +43,11 @@ exports.getActivePane = function (w) {
 exports.addOpenerImpl = function (w) {
   return w.addOpener.bind(w);
 };
+
+exports.paneForURIImpl = function (w) {
+  return w.paneForURI.bind(w);
+};
+
+exports.paneForItemImpl = function (w) {
+  return w.paneForItem.bind(w);
+};

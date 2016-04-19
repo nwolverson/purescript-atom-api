@@ -1,6 +1,6 @@
 module Atom.Workspace (Workspace, WORKSPACE,
   observeTextEditors, onDidChangeActivePaneItem, getActiveTextEditor, addModalPanel,
-  Panel, destroyPanel, open, OpenOptions, defaultOpenOptions, getActivePane, addOpener) where
+  Panel, destroyPanel, open, OpenOptions, defaultOpenOptions, getActivePane, addOpener, paneForURI, paneForItem) where
 
 import Prelude
 import DOM.Node.Types
@@ -10,6 +10,7 @@ import Control.Monad.Eff (Eff)
 import Data.Foreign (Foreign)
 import Data.Function.Eff (EffFn1, runEffFn4, EffFn4, runEffFn2, EffFn2, mkEffFn1, runEffFn1)
 import Data.Maybe (Maybe)
+import Data.Nullable (toMaybe, Nullable)
 
 foreign import data Workspace :: *
 foreign import data WORKSPACE :: !
@@ -93,3 +94,13 @@ addOpener :: forall eff. Workspace ->
   (String -> Eff (workspace :: WORKSPACE | eff) Element) ->
   (Eff (workspace :: WORKSPACE | eff) Pane)
 addOpener w f = runEffFn1 (addOpenerImpl w) (mkEffFn1 f)
+
+foreign import paneForURIImpl ::  forall eff. Workspace -> EffFn1 (workspace :: WORKSPACE | eff) String (Nullable Pane)
+
+paneForURI ::  forall eff. Workspace -> String -> Eff (workspace :: WORKSPACE | eff) (Maybe Pane)
+paneForURI w uri = toMaybe <$> runEffFn1 (paneForURIImpl w) uri
+
+foreign import paneForItemImpl ::  forall eff a. Workspace -> EffFn1 (workspace :: WORKSPACE | eff) a (Nullable Pane)
+
+paneForItem ::  forall eff a. Workspace -> a -> Eff (workspace :: WORKSPACE | eff) (Maybe Pane)
+paneForItem w a = toMaybe <$> runEffFn1 (paneForItemImpl w) a
