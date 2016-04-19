@@ -33,3 +33,13 @@ exports.openImpl = function (w) {
     return w.open(name,opt).then(cb, err);
   };
 };
+
+exports.getActivePane = function (w) {
+  return function() {
+    return w.getActivePane();
+  };
+};
+
+exports.addOpenerImpl = function (w) {
+  return w.addOpener.bind(w);
+};

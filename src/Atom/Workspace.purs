@@ -1,11 +1,14 @@
-module Atom.Workspace (Workspace, WORKSPACE, observeTextEditors, onDidChangeActivePaneItem, getActiveTextEditor, addModalPanel, Panel, destroyPanel, open, OpenOptions, defaultOpenOptions) where
+module Atom.Workspace (Workspace, WORKSPACE,
+  observeTextEditors, onDidChangeActivePaneItem, getActiveTextEditor, addModalPanel,
+  Panel, destroyPanel, open, OpenOptions, defaultOpenOptions, getActivePane, addOpener) where
 
 import Prelude
 import DOM.Node.Types
 import Atom.Editor (TextEditor, toEditor)
+import Atom.Pane (Pane)
 import Control.Monad.Eff (Eff)
 import Data.Foreign (Foreign)
-import Data.Function.Eff (runEffFn4, EffFn4, EffFn1, runEffFn2, EffFn2, mkEffFn1, runEffFn1)
+import Data.Function.Eff (EffFn1, runEffFn4, EffFn4, runEffFn2, EffFn2, mkEffFn1, runEffFn1)
 import Data.Maybe (Maybe)
 
 foreign import data Workspace :: *
@@ -79,3 +82,14 @@ open :: forall eff. Workspace -> String -> OpenOptions ->
   (Eff (workspace :: WORKSPACE | eff) Unit) ->
   Eff (workspace :: WORKSPACE | eff) Unit
 open w s o cb err = runEffFn4 (openImpl w) s o (mkEffFn1 cb) err
+
+foreign import getActivePane :: forall eff. Workspace -> Eff (workspace :: WORKSPACE | eff) Pane
+
+foreign import addOpenerImpl :: forall eff. Workspace -> EffFn1 (workspace :: WORKSPACE | eff)
+  (EffFn1 (workspace :: WORKSPACE | eff) String Element)
+  Pane
+
+addOpener :: forall eff. Workspace ->
+  (String -> Eff (workspace :: WORKSPACE | eff) Element) ->
+  (Eff (workspace :: WORKSPACE | eff) Pane)
+addOpener w f = runEffFn1 (addOpenerImpl w) (mkEffFn1 f)
