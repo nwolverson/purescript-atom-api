@@ -3,12 +3,12 @@ module Atom.Workspace (Workspace, WORKSPACE,
   Panel, destroyPanel, open, OpenOptions, defaultOpenOptions, getActivePane, addOpener, paneForURI, paneForItem) where
 
 import Prelude
-import DOM.Node.Types
+import DOM.Node.Types (Element)
 import Atom.Editor (TextEditor, toEditor)
 import Atom.Pane (Pane)
 import Control.Monad.Eff (Eff)
 import Data.Foreign (Foreign)
-import Data.Function.Eff (EffFn1, runEffFn4, EffFn4, runEffFn2, EffFn2, mkEffFn1, runEffFn1)
+import Data.Function.Eff (EffFn1, runEffFn4, EffFn4, mkEffFn1, runEffFn1)
 import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe, Nullable)
 

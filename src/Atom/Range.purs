@@ -1,6 +1,6 @@
 module Atom.Range (getStart, getEnd, mkRange, containsPoint, Range) where
 
-import Data.Function (Fn2, runFn2)
+import Data.Function.Uncurried (Fn2, runFn2)
 import Atom.Point (Point)
 
 foreign import data Range :: *
