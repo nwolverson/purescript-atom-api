@@ -8,7 +8,7 @@
     "purescript-eff-functions": "~1.0.0",
     "purescript-foreign": "^1.0.0",
     "purescript-unsafe-coerce": "^1.0.0",
-    "purescript-dom": "^1.0.0"
+    "purescript-dom": "^2.0.1"
   },
   "devDependencies": {}
 }
