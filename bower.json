@@ -10,5 +10,9 @@
     "purescript-unsafe-coerce": "^2.0.0",
     "purescript-dom": "^3.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "resolutions": {
+    "purescript-eff": "^2.0.0",
+    "purescript-prelude": "^2.1.0"
+  }
 }

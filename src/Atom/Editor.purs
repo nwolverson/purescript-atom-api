@@ -11,6 +11,7 @@ import Atom.Range (Range)
 import Atom.TextBuffer (TextBuffer)
 import Atom.Types (EDITOR)
 import Control.Monad.Eff (Eff)
+import Control.Monad.Except (runExcept)
 import Data.Either (either)
 import Data.Foreign (readString, Foreign)
 import Data.Function.Eff (EffFn1, EffFn3, mkEffFn1, runEffFn1, runEffFn3)
@@ -28,7 +29,7 @@ foreign import getPathImpl :: forall eff. TextEditor -> Eff (editor :: EDITOR | 
 getPath :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) (Maybe String)
 getPath editor = do
   res <- readString <$> getPathImpl editor
-  pure $ either (const Nothing) Just res
+  pure $ either (const Nothing) Just $ runExcept res
 
 foreign import getText :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
 
