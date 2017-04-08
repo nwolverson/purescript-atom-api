@@ -1,9 +1,10 @@
-module Atom.CommandRegistry (addCommand, addCommand', CommandRegistry, COMMAND) where
+module Atom.CommandRegistry (addCommand, addCommand', dispatch, dispatchRoot, CommandRegistry, COMMAND) where
 
-import Prelude (Unit)
 import Control.Monad.Eff (Eff)
-import Data.Function.Eff (EffFn1, EffFn3, mkEffFn1, runEffFn3)
-import DOM.Node.Types (Element)
+import DOM.HTML.Types (HTMLElement)
+import DOM.Node.Types (Element, Node)
+import Data.Function.Eff (EffFn1, EffFn2, EffFn3, mkEffFn1, runEffFn1, runEffFn2, runEffFn3)
+import Prelude (Unit)
 
 foreign import data CommandRegistry :: *
 foreign import data COMMAND :: !
@@ -24,7 +25,18 @@ addCommand' cr elt commandName callback =
 
 -- findCommands(params)
 
--- dispatch(target, commandName)
+dispatch :: forall eff. CommandRegistry -> Node -> String -> Eff (command :: COMMAND | eff) Unit
+dispatch cr = runEffFn2 (dispatchImpl cr)
+
+foreign import dispatchImpl :: forall eff a. CommandRegistry ->
+  EffFn2 (command :: COMMAND | eff) a String Unit
+
+
+dispatchRoot :: forall eff. CommandRegistry -> String -> Eff (command :: COMMAND | eff) Unit
+dispatchRoot cr = runEffFn1 (dispatchRootImpl cr)
+
+foreign import dispatchRootImpl :: forall eff. CommandRegistry ->
+  EffFn1 (command :: COMMAND | eff) String Unit
 
 -- onWillDispatch(callback)
 
