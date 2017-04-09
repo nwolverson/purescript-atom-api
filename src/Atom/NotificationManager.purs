@@ -1,10 +1,10 @@
 module Atom.NotificationManager where
 
 import Prelude (Unit)
-import Control.Monad.Eff (Eff)
+import Control.Monad.Eff (Eff, kind Effect)
 
-foreign import data NotificationManager :: *
-foreign import data NOTIFY :: !
+foreign import data NotificationManager :: Type
+foreign import data NOTIFY :: Effect
 
 foreign import addSuccess :: forall eff. NotificationManager -> String -> Eff (note :: NOTIFY | eff) Unit
 foreign import addInfo :: forall eff. NotificationManager -> String -> Eff (note :: NOTIFY | eff) Unit

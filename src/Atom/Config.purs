@@ -1,12 +1,12 @@
 module Atom.Config (getConfig, setConfig, Config, CONFIG) where
 
 import Prelude (Unit, (<<<))
-import Control.Monad.Eff (Eff)
-import Data.Function.Eff (EffFn2, EffFn1, runEffFn2, runEffFn1)
+import Control.Monad.Eff (Eff, kind Effect)
+import Control.Monad.Eff.Uncurried (EffFn2, EffFn1, runEffFn2, runEffFn1)
 import Data.Foreign (Foreign)
 
-foreign import data Config :: *
-foreign import data CONFIG :: !
+foreign import data Config :: Type
+foreign import data CONFIG :: Effect
 
 foreign import getConfigImpl :: forall eff. Config -> EffFn1 (config :: CONFIG | eff) String Foreign
 

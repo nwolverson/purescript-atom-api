@@ -6,15 +6,14 @@ import Prelude
 import DOM.Node.Types (Element)
 import Atom.Editor (TextEditor, toEditor)
 import Atom.Pane (Pane)
-import Control.Monad.Eff (Eff)
+import Control.Monad.Eff (Eff, kind Effect)
 import Data.Foreign (Foreign)
-import Data.Function.Eff (EffFn1, runEffFn4, EffFn4, mkEffFn1, runEffFn1)
+import Control.Monad.Eff.Uncurried (EffFn1, runEffFn4, EffFn4, mkEffFn1, runEffFn1)
 import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe, Nullable)
 
-foreign import data Workspace :: *
-foreign import data WORKSPACE :: !
-
+foreign import data Workspace :: Type
+foreign import data WORKSPACE :: Effect
 
 foreign import observeTextEditorsImpl :: forall eff. Workspace
   -> EffFn1 eff (EffFn1 eff TextEditor Unit) Unit
@@ -46,7 +45,7 @@ foreign import addModalPanelImpl :: forall eff. Workspace ->
   EffFn1 (workspace :: WORKSPACE | eff)  { item :: Element, visible :: Boolean, priority :: Int  } Panel
 
 -- TODO move
-foreign import data Panel :: *
+foreign import data Panel :: Type
 
 foreign import destroyPanel :: forall eff. Panel -> Eff (workspace::WORKSPACE | eff) Unit
 

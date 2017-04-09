@@ -3,9 +3,9 @@ module Atom.ContextMenuManager where
 import Prelude (Unit)
 import Control.Monad.Eff (Eff)
 
-foreign import data ContextMenuManager :: *
-foreign import data ContextMenu        :: *
-foreign import data Event              :: *
+foreign import data ContextMenuManager :: Type
+foreign import data ContextMenu        :: Type
+foreign import data Event              :: Type
 
 type ContextMenuOptions = forall r. { devMode :: Boolean | r }
 

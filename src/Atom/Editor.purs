@@ -14,11 +14,11 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Except (runExcept)
 import Data.Either (either)
 import Data.Foreign (readString, Foreign)
-import Data.Function.Eff (EffFn1, EffFn3, mkEffFn1, runEffFn1, runEffFn3)
+import Control.Monad.Eff.Uncurried (EffFn1, EffFn3, mkEffFn1, runEffFn1, runEffFn3)
 import Data.Maybe (Maybe(..))
 import Unsafe.Coerce (unsafeCoerce)
 
-foreign import data TextEditor :: *
+foreign import data TextEditor :: Type
 
 foreign import getTitle :: forall eff. TextEditor -> Eff (editor :: EDITOR | eff) String
 

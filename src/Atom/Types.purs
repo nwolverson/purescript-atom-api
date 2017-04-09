@@ -1,3 +1,5 @@
 module Atom.Types where
 
-foreign import data EDITOR :: !
+import Control.Monad.Eff (kind Effect)
+
+foreign import data EDITOR :: Effect

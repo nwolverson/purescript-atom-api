@@ -3,7 +3,7 @@ module Atom.Range (getStart, getEnd, mkRange, containsPoint, Range) where
 import Data.Function.Uncurried (Fn2, runFn2)
 import Atom.Point (Point)
 
-foreign import data Range :: *
+foreign import data Range :: Type
 
 foreign import getStart :: Range -> Point
 foreign import getEnd :: Range -> Point

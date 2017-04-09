@@ -1,10 +1,10 @@
 module Atom.Clipboard where
 
 import Prelude (Unit)
-import Control.Monad.Eff (Eff)
+import Control.Monad.Eff (Eff, kind Effect)
 
-foreign import data Clipboard    :: *
-foreign import data ClipboardEff :: * -> !
+foreign import data Clipboard    :: Type
+foreign import data ClipboardEff :: Type -> Effect
 
 foreign import read  :: forall a e. Clipboard -> Eff (clipboardEff :: ClipboardEff a | e) String
 

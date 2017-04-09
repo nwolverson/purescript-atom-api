@@ -4,9 +4,9 @@ import Prelude
 import Control.Monad.Eff (Eff)
 import Atom.Types (EDITOR)
 import Atom.Range (Range)
-import Data.Function.Eff (EffFn1, runEffFn1)
+import Control.Monad.Eff.Uncurried (EffFn1, runEffFn1)
 
-foreign import data TextBuffer :: *
+foreign import data TextBuffer :: Type
 
 foreign import setTextViaDiffImpl :: forall eff. TextBuffer -> EffFn1 (editor :: EDITOR | eff) String Range
 

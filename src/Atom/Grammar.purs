@@ -1,4 +1,6 @@
 module Atom.Grammar where
 
-foreign import data Grammar :: *
-foreign import data GRAMMAR :: !
+import Control.Monad.Eff (kind Effect)
+
+foreign import data Grammar :: Type
+foreign import data GRAMMAR :: Effect

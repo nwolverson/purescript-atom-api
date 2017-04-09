@@ -1,13 +1,13 @@
 module Atom.CommandRegistry (addCommand, addCommand', dispatch, dispatchRoot, CommandRegistry, COMMAND) where
 
-import Control.Monad.Eff (Eff)
+import Control.Monad.Eff (Eff, kind Effect)
 import DOM.HTML.Types (HTMLElement)
 import DOM.Node.Types (Element, Node)
-import Data.Function.Eff (EffFn1, EffFn2, EffFn3, mkEffFn1, runEffFn1, runEffFn2, runEffFn3)
+import Control.Monad.Eff.Uncurried (EffFn1, EffFn2, EffFn3, mkEffFn1, runEffFn1, runEffFn2, runEffFn3)
 import Prelude (Unit)
 
-foreign import data CommandRegistry :: *
-foreign import data COMMAND :: !
+foreign import data CommandRegistry :: Type
+foreign import data COMMAND :: Effect
 
 foreign import addImpl :: forall eff a. CommandRegistry ->
   EffFn3 (command :: COMMAND | eff) a String (EffFn1 (command :: COMMAND | eff) Unit Unit) Unit
